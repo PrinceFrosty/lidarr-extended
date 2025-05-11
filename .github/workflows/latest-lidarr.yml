@@ -1,6 +1,12 @@
 name: Get latest release version
 on:
-  schedule:
+   push:
+    branches: [ "latest" ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+   pull_request:
+    branches: [ "latest" ]
+   schedule:
     - cron:  '0 10 * * *'
 jobs:
   get-version:
