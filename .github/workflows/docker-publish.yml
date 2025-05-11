@@ -10,7 +10,7 @@ on:
 #     - cron: '15 23 * * *'
    push:
      paths:
-      - '.github/workflows/*'
+      - 'latest-lidarr.txt'
 #     branches: [ "latest" ]
 #     # Publish semver tags as releases.
 #     tags: [ 'v*.*.*' ]
