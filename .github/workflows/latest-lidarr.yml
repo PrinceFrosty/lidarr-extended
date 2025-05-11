@@ -8,6 +8,8 @@ on:
     branches: [ "latest" ]
    schedule:
     - cron:  '0 10 * * *'
+env:
+  REPO_SCOPED_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
 jobs:
   get-version:
     runs-on: ubuntu-latest
