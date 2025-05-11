@@ -10,6 +10,7 @@ on:
     - cron:  '13 */8 * * *'
 jobs:
   get-version:
+    continue-on-error: true
     runs-on: ubuntu-latest
     permissions:
       contents: write
