@@ -37,7 +37,7 @@ jobs:
         run: |
           if [[ $new-arr != $(cat latest-arr-scripts.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
-            echo "$new-arr" > latest-arr-scripts.txt;
+            echo "$new_arr" > latest-arr-scripts.txt;
           else
             echo "modified=$(echo "false")" >> $GITHUB_OUTPUT;
           fi
