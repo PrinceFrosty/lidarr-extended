@@ -30,7 +30,7 @@ jobs:
         id: latest-arr
         run: |
           echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT;
-          if [[ ${{ steps.latest-arr.output.new }} != $(cat latest-arr-scripts.txt) ]];then
+          if [[ ${{ steps.latest-arr.output.new }} != ($(cat latest-arr-scripts.txt)) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
             echo new-arr > latest-arr-scripts.txt;
           else
