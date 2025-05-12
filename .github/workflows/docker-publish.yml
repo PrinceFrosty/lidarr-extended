@@ -26,14 +26,11 @@ jobs:
       modified: ${{ steps.latest-arr.outputs.modified }}
     steps:
       - uses: actions/checkout@v4
-      - name: tmp
-        id: tmp
-        run: |
-          echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT;
       - name: Grab latest arr version
         id: latest-arr
         run: |
-          if [[ ${{ steps.tmp.output.new-arr }} != $(cat latest-arr-scripts.txt) ]];then
+          echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT;
+          if [[ steps.latest-arr.output.new-arr != $(cat latest-arr-scripts.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
             echo new-arr > latest-arr-scripts.txt;
           else
