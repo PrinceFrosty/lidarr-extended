@@ -29,7 +29,8 @@ jobs:
       - name: Grab latest arr version
         id: latest-arr
         run: |
-          if [[ ${{ steps.latest-arr.output.new }} != 0 ]];then
+          echo "new-arr=0" >> $GITHUB_OUTPUT;
+          if [[ ${{ steps.latest-arr.output.new }} != $(cat latest-arr-scripts.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
             echo new-arr > latest-arr-scripts.txt;
           else
