@@ -51,7 +51,7 @@ jobs:
   check-lidarr:
     runs-on: ubuntu-latest
     permissions:
-      # pull-requests: write
+      pull-requests: write
       contents: write
     outputs:
       modified: ${{ steps.latest-lidarr.outputs.modified }}
