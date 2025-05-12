@@ -31,10 +31,10 @@ jobs:
         run: |
           echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT
           if [[ ${{ steps.latest-arr.output.new }} != $(cat latest-arr-scripts.txt) ]];then
-            echo "modified=$(echo "true")" >> $GITHUB_OUTPUT
-            echo new-arr > latest-arr-scripts.txt
+            echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
+            echo new-arr > latest-arr-scripts.txt;
           else
-            echo "modified=$(echo "false")" >> $GITHUB_OUTPUT
+            echo "modified=$(echo "false")" >> $GITHUB_OUTPUT;
           fi
 
   check-lidarr:
@@ -50,10 +50,10 @@ jobs:
         run: |
           echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
           if [[ ${{ steps.latest-lidarr.output.new }} != $(cat latest-lidarr.txt) ]];then
-            echo "modified=$(echo "true")" >> $GITHUB_OUTPUT
-            echo new-lidarr > latest-lidarr.txt
+            echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
+            echo new-lidarr > latest-lidarr.txt;
           else
-            echo "modified=$(echo "false")" >> $GITHUB_OUTPUT
+            echo "modified=$(echo "false")" >> $GITHUB_OUTPUT;
           fi
 
   build:
