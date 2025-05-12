@@ -26,7 +26,7 @@ jobs:
     outputs:
       modified: ${{ steps.latest-arr.outputs.modified }}
     steps:
-      # - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: git pull
         run: git pull
       # - uses: actions/download-artifact@v4
@@ -74,7 +74,7 @@ jobs:
     outputs:
       modified: ${{ steps.latest-lidarr.outputs.modified }}
     steps:
-      # - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: git pull
         run: git pull
       # - uses: actions/download-artifact@v4
