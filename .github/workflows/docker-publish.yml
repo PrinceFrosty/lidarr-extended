@@ -27,6 +27,9 @@ jobs:
       modified: ${{ steps.latest-arr.outputs.modified }}
     steps:
       - uses: actions/checkout@v4
+      - name: git pull
+        run: |
+          git pull
       - name: Grab latest arr version
         id: grab-new-arr
         run: echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT
@@ -49,6 +52,7 @@ jobs:
           git commit -am "New arr version"
       - name: Push changes
         if: steps.latest-arr.outputs.modified == 'true'
+        continue-on-error: true
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -63,6 +67,9 @@ jobs:
       modified: ${{ steps.latest-lidarr.outputs.modified }}
     steps:
       - uses: actions/checkout@v4
+      - name: git pull
+        run: |
+          git pull
       - name: Grab latest lidarr version
         id: grab-new-lidarr
         run: echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
@@ -85,6 +92,7 @@ jobs:
           git commit -am "New lidarr version"
       - name: Push changes
         if: steps.latest-lidarr.outputs.modified == 'true'
+        continue-on-error: true
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
