@@ -28,8 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: git pull
-        run: |
-          git pull
+        run: git pull
       # - uses: actions/download-artifact@v4
       #   with:
       #     github-token: ${{ secrets.GH_PAT }}
@@ -77,8 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: git pull
-        run: |
-          git pull
+        run: git pull
       # - uses: actions/download-artifact@v4
       #   with:
       #     github-token: ${{ secrets.GH_PAT }}
