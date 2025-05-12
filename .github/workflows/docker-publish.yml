@@ -26,13 +26,13 @@ jobs:
     outputs:
       modified: ${{ steps.latest-arr.outputs.modified }}
     steps:
-      # - uses: actions/checkout@v4
-      # - name: git pull
-      #   run: |
-      #     git pull
-      - uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GH_PAT }}
+      - uses: actions/checkout@v4
+      - name: git pull
+        run: |
+          git pull
+      # - uses: actions/download-artifact@v4
+      #   with:
+      #     github-token: ${{ secrets.GH_PAT }}
       - name: Grab latest arr version
         id: grab-new-arr
         run: echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT
@@ -47,25 +47,25 @@ jobs:
           else
             echo "modified=$(echo "false")" >> $GITHUB_OUTPUT;
           fi
-      - name: Upload Artifact
-        if: steps.latest-arr.outputs.modified == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: latest-arr-scripts
-          path: latest-arr-scripts.txt
-          overwrite: true
-      # - name: Commit latest release version
+      # - name: Upload Artifact
       #   if: steps.latest-arr.outputs.modified == 'true'
-      #   run: |
-      #     git config --global user.name 'PrinceFrosty'
-      #     git config --global user.email '33556237+PrinceFrosty@users.noreply.github.com'
-      #     git commit -am "New arr version"
-      # - name: Push changes
-      #   if: steps.latest-arr.outputs.modified == 'true'
-      #   uses: ad-m/github-push-action@master
+      #   uses: actions/upload-artifact@v4
       #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: ${{ github.ref }}
+      #     name: latest-arr-scripts
+      #     path: latest-arr-scripts.txt
+      #     overwrite: true
+      - name: Commit latest release version
+        if: steps.latest-arr.outputs.modified == 'true'
+        run: |
+          git config --global user.name 'PrinceFrosty'
+          git config --global user.email '33556237+PrinceFrosty@users.noreply.github.com'
+          git commit -am "New arr version"
+      - name: Push changes
+        if: steps.latest-arr.outputs.modified == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
   check-lidarr:
     runs-on: ubuntu-latest
@@ -75,13 +75,13 @@ jobs:
     outputs:
       modified: ${{ steps.latest-lidarr.outputs.modified }}
     steps:
-      # - uses: actions/checkout@v4
-      # - name: git pull
-      #   run: |
-      #     git pull
-      - uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GH_PAT }}
+      - uses: actions/checkout@v4
+      - name: git pull
+        run: |
+          git pull
+      # - uses: actions/download-artifact@v4
+      #   with:
+      #     github-token: ${{ secrets.GH_PAT }}
       - name: Grab latest lidarr version
         id: grab-new-lidarr
         run: echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
@@ -96,25 +96,25 @@ jobs:
           else
             echo "modified=$(echo "false")" >> $GITHUB_OUTPUT;
           fi
-      - name: Upload Artifact
-        if: steps.latest-lidarr.outputs.modified == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: latest-lidarr
-          path: latest-lidarr.txt
-          overwrite: true
-      # - name: Commit latest release version
+      # - name: Upload Artifact
       #   if: steps.latest-lidarr.outputs.modified == 'true'
-      #   run: |
-      #     git config --global user.name 'PrinceFrosty'
-      #     git config --global user.email '33556237+PrinceFrosty@users.noreply.github.com'
-      #     git commit -am "New lidarr version"
-      # - name: Push changes
-      #   if: steps.latest-lidarr.outputs.modified == 'true'
-      #   uses: ad-m/github-push-action@master
+      #   uses: actions/upload-artifact@v4
       #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: ${{ github.ref }}
+      #     name: latest-lidarr
+      #     path: latest-lidarr.txt
+      #     overwrite: true
+      - name: Commit latest release version
+        if: steps.latest-lidarr.outputs.modified == 'true'
+        run: |
+          git config --global user.name 'PrinceFrosty'
+          git config --global user.email '33556237+PrinceFrosty@users.noreply.github.com'
+          git commit -am "New lidarr version"
+      - name: Push changes
+        if: steps.latest-lidarr.outputs.modified == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
   build:
     needs: [check-arr, check-lidarr]
