@@ -32,7 +32,6 @@ jobs:
       #     git pull
       - uses: actions/download-artifact@v4
         with:
-          name: latest-arr-scripts
           github-token: ${{ secrets.GH_PAT }}
       - name: Grab latest arr version
         id: grab-new-arr
@@ -82,7 +81,6 @@ jobs:
       #     git pull
       - uses: actions/download-artifact@v4
         with:
-          name: latest-lidarr
           github-token: ${{ secrets.GH_PAT }}
       - name: Grab latest lidarr version
         id: grab-new-lidarr
