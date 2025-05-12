@@ -12,9 +12,10 @@ jobs:
   get-version:
     runs-on: ubuntu-latest
     permissions:
+      pull-requests: write
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Fetch push date
         run: |
           curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | \
@@ -33,4 +34,8 @@ jobs:
           git config --global user.name 'PrinceFrosty'
           git config --global user.email '33556237+PrinceFrosty@users.noreply.github.com'
           git commit -am "New release version"
-          git push
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
