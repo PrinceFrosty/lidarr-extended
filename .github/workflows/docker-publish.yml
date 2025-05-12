@@ -52,7 +52,7 @@ jobs:
           git commit -am "New arr version"
       - name: Push changes
         if: steps.latest-arr.outputs.modified == 'true'
-        continue-on-error: true
+        # continue-on-error: true
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -92,7 +92,7 @@ jobs:
           git commit -am "New lidarr version"
       - name: Push changes
         if: steps.latest-lidarr.outputs.modified == 'true'
-        continue-on-error: true
+        # continue-on-error: true
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
