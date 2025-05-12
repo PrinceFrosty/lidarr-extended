@@ -33,7 +33,7 @@ jobs:
       - name: Pick latest arr version
         id: latest-arr
         env:
-          new_arr: ${{ steps.grab-new-lidarr.outputs.new-arr }}
+          new_arr: ${{ steps.grab-new-arr.outputs.new-arr }}
         run: |
           if [[ $new-arr != $(cat latest-arr-scripts.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
