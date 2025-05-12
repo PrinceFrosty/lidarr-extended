@@ -1,4 +1,4 @@
-name: Docker-Publish
+name: Build and publish if new versions exist
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -8,15 +8,8 @@ name: Docker-Publish
 on:
   push:
     branches: ["latest"]
-    # Publish semver tags as releases.
-    tags: ["v*.*.*"]
-  pull_request:
-    branches: ["latest"]
   schedule:
     - cron: "13 */8 * * *"
-  # push:
-  #   paths:
-  #     - "latest-lidarr.txt"
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -33,7 +26,7 @@ jobs:
       new-versions: ${{ steps.git-check.outputs.modified }}
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch push date
+      - name: Fetch updated date
         run: |
           curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | \
           jq -r ".updated_at" > latest-arr-scripts.txt
@@ -44,9 +37,6 @@ jobs:
       - name: Check for modified files
         id: git-check
         run: echo "modified=$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")" >> $GITHUB_OUTPUT
-      # - name: Deny build
-      #   if: steps.git-check.outputs.modified == 'false'
-      #   run: exit 1
 
   build:
     needs: get-version
