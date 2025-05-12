@@ -6,9 +6,17 @@ name: Docker-Publish
 # documentation.
 
 on:
-   push:
-     paths:
-      - 'latest-lidarr.txt'
+  push:
+    branches: ["latest"]
+    # Publish semver tags as releases.
+    tags: ["v*.*.*"]
+  pull_request:
+    branches: ["latest"]
+  schedule:
+    - cron: "13 */8 * * *"
+  # push:
+  #   paths:
+  #     - "latest-lidarr.txt"
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -16,10 +24,28 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
-
 jobs:
-  build:
+  get-version:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch push date
+        run: |
+          curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | \
+          jq -r ".updated_at" > latest-arr-scripts.txt
+      - name: Fetch release version
+        run: |
+          curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | \
+          jq -r ".tag_name" > latest-lidarr.txt
+      - name: Check for modified files
+        id: git-check
+        run: echo "modified=$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")" >> $GITHUB_OUTPUT
 
+  build:
+    if: get-version.steps.git-check.outputs.modified == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -38,7 +64,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 #v3.5.0
         with:
-          cosign-release: 'v2.2.4'
+          cosign-release: "v2.2.4"
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
