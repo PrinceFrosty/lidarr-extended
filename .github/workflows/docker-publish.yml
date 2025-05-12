@@ -35,7 +35,7 @@ jobs:
         env:
           new_arr: ${{ steps.grab-new-arr.outputs.new-arr }}
         run: |
-          if [[ $new-arr != $(cat latest-arr-scripts.txt) ]];then
+          if [[ $new_arr != $(cat latest-arr-scripts.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
             echo "$new_arr" > latest-arr-scripts.txt;
           else
