@@ -59,13 +59,17 @@ jobs:
       modified: ${{ steps.latest-lidarr.outputs.modified }}
     steps:
       - uses: actions/checkout@v4
+      - name: tmp
+        id: tmp
+        run: echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
       - name: Grab latest lidarr version
         id: latest-lidarr
+        env:
+          new_lidarr: ${{ steps.tmp.outputs.new-lidarr }}
         run: |
-          echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
-          if [[ $new-lidarr != $(cat latest-lidarr.txt) ]];then
+          if [[ $new_lidarr != $(cat latest-lidarr.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
-            echo "$new-lidarr" > latest-lidarr.txt;
+            echo "$new_lidarr" > latest-lidarr.txt;
           else
             echo "modified=$(echo "false")" >> $GITHUB_OUTPUT;
           fi
