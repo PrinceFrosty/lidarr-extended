@@ -29,8 +29,8 @@ jobs:
       - name: Grab latest arr version
         id: latest-arr
         run: |
-          echo "new-arr=0" >> $GITHUB_OUTPUT;
-          if [[ ${{ steps.latest-arr.output.new }} != $(cat latest-arr-scripts.txt) ]];then
+          echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT;
+          if [[ ${{ steps.latest-arr.output.new-arr }} != $(cat latest-arr-scripts.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
             echo new-arr > latest-arr-scripts.txt;
           else
@@ -49,7 +49,7 @@ jobs:
         id: latest-lidarr
         run: |
           echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
-          if [[ ${{ steps.latest-lidarr.output.new }} != $(cat latest-lidarr.txt) ]];then
+          if [[ ${{ steps.latest-lidarr.output.new-lidarr }} != $(cat latest-lidarr.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
             echo new-lidarr > latest-lidarr.txt;
           else
