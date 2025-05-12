@@ -32,6 +32,8 @@ jobs:
       #     git pull
       - uses: actions/download-artifact@v4
       - name: Display structure of downloaded files
+        with:
+          name: latest-arr-scripts
         run: ls -R
       - name: Grab latest arr version
         id: grab-new-arr
@@ -81,6 +83,8 @@ jobs:
       #     git pull
       - uses: actions/download-artifact@v4
       - name: Display structure of downloaded files
+        with:
+          name: latest-lidarr
         run: ls -R
       - name: Grab latest lidarr version
         id: grab-new-lidarr
