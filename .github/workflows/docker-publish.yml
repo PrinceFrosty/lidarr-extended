@@ -29,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      new-versions: ${{ steps.git-check.outputs.modified }}
     steps:
       - uses: actions/checkout@v4
       - name: Fetch push date
@@ -42,13 +44,13 @@ jobs:
       - name: Check for modified files
         id: git-check
         run: echo "modified=$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")" >> $GITHUB_OUTPUT
-      - name: Deny build
-        if: steps.git-check.outputs.modified == 'false'
-        run: exit 1
+      # - name: Deny build
+      #   if: steps.git-check.outputs.modified == 'false'
+      #   run: exit 1
 
   build:
     needs: get-version
-    # if: steps.git-check.outputs.modified == 'true'
+    if: needs.get-version.outputs.new-versions == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
