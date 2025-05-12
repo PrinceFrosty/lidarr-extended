@@ -28,9 +28,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Grab latest arr version
+        id: grab-new-arr
+        run: echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT;
+      - name: Pick latest arr version
         id: latest-arr
+        env:
+          new_arr: ${{ steps.grab-new-lidarr.outputs.new-arr }}
         run: |
-          echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT;
           if [[ $new-arr != $(cat latest-arr-scripts.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
             echo "$new-arr" > latest-arr-scripts.txt;
@@ -59,13 +63,13 @@ jobs:
       modified: ${{ steps.latest-lidarr.outputs.modified }}
     steps:
       - uses: actions/checkout@v4
-      - name: tmp
-        id: tmp
-        run: echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
       - name: Grab latest lidarr version
+        id: grab-new-lidarr
+        run: echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
+      - name: Pick latest lidarr version
         id: latest-lidarr
         env:
-          new_lidarr: ${{ steps.tmp.outputs.new-lidarr }}
+          new_lidarr: ${{ steps.grab-new-lidarr.outputs.new-lidarr }}
         run: |
           if [[ $new_lidarr != $(cat latest-lidarr.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
