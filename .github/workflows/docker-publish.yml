@@ -30,11 +30,11 @@ jobs:
       # - name: git pull
       #   run: |
       #     git pull
-      - uses: actions/download-artifact@v4
-      - name: Display structure of downloaded files
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          name: latest-arr-scripts
-        run: ls -R
+          path: latest-arr-scripts.txt
+      - run: ls -R
       - name: Grab latest arr version
         id: grab-new-arr
         run: echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT
@@ -81,11 +81,11 @@ jobs:
       # - name: git pull
       #   run: |
       #     git pull
-      - uses: actions/download-artifact@v4
-      - name: Display structure of downloaded files
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          name: latest-lidarr
-        run: ls -R
+          path: latest-lidarr.txt
+      - run: ls -R
       - name: Grab latest lidarr version
         id: grab-new-lidarr
         run: echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
