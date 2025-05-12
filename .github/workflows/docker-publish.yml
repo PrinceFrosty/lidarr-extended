@@ -18,29 +18,47 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  get-version:
+  check-arr:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     outputs:
-      new-versions: ${{ steps.git-check.outputs.modified }}
+      modified: ${{ steps.latest-arr.outputs.modified }}
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch updated date
+      - name: Grab latest arr version
+        id: latest-arr
         run: |
-          curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | \
-          jq -r ".updated_at" > latest-arr-scripts.txt
-      - name: Fetch release version
+          echo "new-arr=$(curl -sL https://api.github.com/repos/RandomNinjaAtk/arr-scripts | jq -r ".updated_at")" >> $GITHUB_OUTPUT
+          if [[ ${{ steps.latest-arr.output.new }} != $(cat latest-arr-scripts.txt) ]];then
+            echo "modified=$(echo "true")" >> $GITHUB_OUTPUT
+            echo new-arr > latest-arr-scripts.txt
+          else
+            echo "modified=$(echo "false")" >> $GITHUB_OUTPUT
+          fi
+
+  check-lidarr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      modified: ${{ steps.latest-lidarr.outputs.modified }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Grab latest lidarr version
+        id: latest-lidarr
         run: |
-          curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | \
-          jq -r ".tag_name" > latest-lidarr.txt
-      - name: Check for modified files
-        id: git-check
-        run: echo "modified=$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")" >> $GITHUB_OUTPUT
+          echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
+          if [[ ${{ steps.latest-lidarr.output.new }} != $(cat latest-lidarr.txt) ]];then
+            echo "modified=$(echo "true")" >> $GITHUB_OUTPUT
+            echo new-lidarr > latest-lidarr.txt
+          else
+            echo "modified=$(echo "false")" >> $GITHUB_OUTPUT
+          fi
 
   build:
-    needs: get-version
-    if: needs.get-version.outputs.new-versions == 'true'
+    needs: [check-arr, check-lidarr]
+    if: needs.check-arr.outputs.modified == 'true' || needs.check-lidarr.outputs.modified == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
