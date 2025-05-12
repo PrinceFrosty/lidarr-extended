@@ -27,14 +27,14 @@ jobs:
       - name: Check for modified files
         id: git-check
         run: echo "modified=$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")" >> $GITHUB_OUTPUT
-        if: steps.git-check.outputs.modified == 'true'
       - name: Commit latest release version
-        continue-on-error: true
+        if: steps.git-check.outputs.modified == 'true'
         run: |
           git config --global user.name 'PrinceFrosty'
           git config --global user.email '33556237+PrinceFrosty@users.noreply.github.com'
           git commit -am "New release version"
       - name: Push changes
+        if: steps.git-check.outputs.modified == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
