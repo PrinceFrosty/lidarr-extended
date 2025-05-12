@@ -63,7 +63,7 @@ jobs:
         id: latest-lidarr
         run: |
           echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
-          if [[ ${{ $new-lidarr }} != $(cat latest-lidarr.txt) ]];then
+          if [[ $new-lidarr != $(cat latest-lidarr.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
             echo "$new-lidarr" > latest-lidarr.txt;
           else
