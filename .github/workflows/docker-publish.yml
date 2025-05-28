@@ -82,7 +82,7 @@ jobs:
       #     github-token: ${{ secrets.GH_PAT }}
       - name: Grab latest lidarr version
         id: grab-new-lidarr
-        run: echo "new_lidarr=$(tr -dc '0-9' <<< $(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/branches/master | jq -r ".commit.committer.date"))" >> $GITHUB_OUTPUT
+        run: echo "new_lidarr=$(tr -dc '0-9' <<< $(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/branches/master | jq -r ".commit.commit.committer.date"))" >> $GITHUB_OUTPUT
       - name: Pick latest lidarr version
         id: latest-lidarr
         env:
