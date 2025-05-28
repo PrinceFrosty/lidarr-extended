@@ -82,13 +82,13 @@ jobs:
       #     github-token: ${{ secrets.GH_PAT }}
       - name: Grab latest lidarr version
         id: grab-new-lidarr
-        run: echo "new-lidarr=$(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name")" >> $GITHUB_OUTPUT
+        run: echo "new_lidarr=$(tr -dc '0-9' <<< $(curl -sL https://api.github.com/repos/linuxserver/docker-lidarr/releases/latest | jq -r ".tag_name"))" >> $GITHUB_OUTPUT
       - name: Pick latest lidarr version
         id: latest-lidarr
         env:
-          new_lidarr: ${{ steps.grab-new-lidarr.outputs.new-lidarr }}
+          new_lidarr: ${{ steps.grab-new-lidarr.outputs.new_lidarr }}
         run: |
-          if [[ $new_lidarr != $(cat latest-lidarr.txt) ]];then
+          if [[ $new_lidarr > $(cat latest-lidarr.txt) ]];then
             echo "modified=$(echo "true")" >> $GITHUB_OUTPUT;
             echo "$new_lidarr" > latest-lidarr.txt;
           else
